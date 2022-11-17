@@ -1,7 +1,7 @@
 export const config = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
-    port: process.env.DB_PORT,
+    host: 'condominios.cifm8lfferqz.us-west-2.rds.amazonaws.com',
+        user: 'victorinfluencia',
+        password: 'colocolo5631',
+        database: 'condominios',
+        port: '5463',
 }
