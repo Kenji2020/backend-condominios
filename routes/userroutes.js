@@ -6,8 +6,10 @@ const router = Router()
 router.get('/', (req, res) => {
     res.send('Hello World!')
     })
-    
-router.get('/users', getUsers)
+
+router.get('/users', (req, res) => {
+    res.send('Hello World!')
+    })
 router.get('/users/:id', getUser)
 router.delete('/users/:id', deleteUser)
 router.patch('/users/:id', editUser)
