@@ -8,4 +8,5 @@ export const pool = createPool({
         password: 'colocolo5631',
         database: 'condominios',
         port: '5463',
+        headers: {'User-Agent':'request' }
 })
