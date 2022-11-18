@@ -1,4 +1,5 @@
 import { Router } from "express"
+import { pool } from "../Components/db.js";
 
 import { getUser, getUsers, deleteUser, editUser, createUser } from "../controllers/controllers.js"
 
@@ -7,7 +8,12 @@ router.get("/", (req, res) => {
     res.send("Hello World!")
     })
 router.get('/users', (req, res) => {
-    getUsers(req, res)
+    const promisePool = pool.promise();
+    const [result] = promisePool.query(
+      "select  * from users where id = ?",
+      [req.params.id]
+    );
+    res.json(result);
     })
 router.get('/users/:id', getUser)
 router.delete('/users/:id', deleteUser)
