@@ -14,13 +14,10 @@ export const getUser = async (req, res) => {
   try {
     const promisePool = pool.promise();
     const [result] = await promisePool.query(
-      "select * from usuarios where id  = ? ",
+      "select  * from users where id = ?",
       [req.params.id]
     );
-    if (result.length === 0) {
-      res.status(404).json({ message: error.message });
-    }
-    res.send(result);
+    res.json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
