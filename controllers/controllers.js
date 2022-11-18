@@ -91,17 +91,21 @@ export const createUser = async (req, res) => {
 };
 
 export const getLogin= async (req,res)=>{
-  comparePassword(req.body.password, hash, function (err, isPasswordMatch) {
-    if (err) {
-      throw err;
-    }
-    console.log(
-      "Password: " +
-        req.body.password +
-        " Hash: " +
-        hash +
-        " Match: " +
-        isPasswordMatch
-    );
-  });
+
+  async function hashIt(password){
+    const salt = await bcrypt.genSalt(6);
+    const hashed = await bcrypt.hash(password, salt);
+    return hashed
+  }
+  hashIt(password);
+  async function compareIt(password){
+    const validPassword = await bcrypt.compare(password, hashedPassword);
+    return validPassword
+  }
+  if (compareIt(password)){
+console.log('login')  
+}else{
+      console.log('error')   //error
+  }
+
 }
