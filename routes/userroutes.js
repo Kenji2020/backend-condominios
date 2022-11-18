@@ -8,9 +8,9 @@ router.get("/", (req, res) => {
     })
 router.get('/users', getUsers)
 router.get('/users/:id', getUser)
-router.delete('/users/:id', deleteUser)
+/*router.delete('/users/:id', deleteUser)
 router.patch('/users/:id', editUser)
-router.put('/users/:id', editUser)
-router.post('/users', createUser)
+router.put('/users/:id', editUser)*/
+//router.post('/users', createUser)
 
 export default router
