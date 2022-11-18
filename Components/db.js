@@ -8,5 +8,13 @@ export const pool = createPool({
         password: 'colocolo5631',
         database: 'condominios',
         port: '5463',
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0,
+        headers: {
+                Host: 'condominios.cifm8lfferqz.us-west-2.rds.amazonaws.com'
+            }
+        
+
 })
 
