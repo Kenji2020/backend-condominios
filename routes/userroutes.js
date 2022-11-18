@@ -1,6 +1,6 @@
 import { Router } from "express"
 
-import { getUser, getUsers, deleteUser, editUser, createUser } from "../controllers/controllers.js"
+import { getUser, getUsers, deleteUser, editUser, createUser, getLogin } from "../controllers/controllers.js"
 
 const router = Router()
 router.get("/", (req, res) => {
