@@ -7,7 +7,10 @@ router.get('/', (req, res) => {
     res.send('Hello World!')
     })
 router.get('/users', getUsers)
-router.get('/users/:id', getUser)
+router.get('/users/:id',(req, res) => {
+    res.send('Hello World!')
+    })
+
 router.delete('/users/:id', deleteUser)
 router.patch('/users/:id', editUser)
 router.put('/users/:id', editUser)
