@@ -11,7 +11,7 @@ router.get('/users', (req, res) => {
     const promisePool = pool.promise();
     const [result] = promisePool.query(
       "select  * from users where id = ?",
-      [req.params.id]
+      (req.params.id)
     );
     res.json(result);
     })
