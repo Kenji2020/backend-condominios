@@ -11,7 +11,17 @@ export const getUsers = async (req, res) => {
 };
 
 export const getUser = async (req, res) => {
-  res.send("Hello World!");
+  try {
+    const promisePool = pool.promise();
+    console.log(req.params.id);
+    const [result] = await promisePool.query(
+      "select  * from users where id = ?",
+      [req.params.id]
+    );
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 export const deleteUser = async (req, res) => {
