@@ -4,7 +4,7 @@ export const getUsers = async (req, res) => {
   try {
     const promisePool = pool.promise();
     const [result] = await promisePool.query("select  * from users ");
-    res.json(result);
+    res.json('Hello world users');
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
