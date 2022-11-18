@@ -43,29 +43,65 @@ export const deleteUser = async (req, res) => {
 export const editUser = async (req, res) => {
   try {
     const promisePool = pool.promise();
-    const result = await promisePool.query(
-      "update users set ? where id = ?",
-      [req.body, req.params.id]
-    );
+    const result = await promisePool.query("update users set ? where id = ?", [
+      req.body,
+      req.params.id,
+    ]);
     res.json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
+export const cryptPassword = function (password, callback) {
+  bcrypt.genSalt(10, function (err, salt) {
+    if (err) return callback(err);
+
+    bcrypt.hash(password, salt, function (err, hash) {
+      return callback(err, hash);
+    });
+  });
+};
+
+export const comparePassword = function (plainPass, hashword, callback) {
+  bcrypt.compare(plainPass, hashword, function (err, isPasswordMatch) {
+    return err == null ? callback(null, isPasswordMatch) : callback(err);
+  });
+};
 export const createUser = async (req, res) => {
   try {
     const promisePool = pool.promise();
     //hash password
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
-    const { name, email, password, numero} = req.body;
-    const result = await promisePool.query(
-      "insert into users (name,email, password, numero) values (?,?,?,?)",
-      [name, email, hashedPassword, numero]
-    );
+    const hash = cryptPassword(req.body.password, function (err, hash) {
+      if (err) {
+        throw err;
+      }
+      return hash;
+    });
+   
+    const [result] = await promisePool.query("insert into users set ?", [
+      req.body.name,
+      req.body.email,
+      hash,
+    ]);
     res.json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const getLogin= async (req,res)=>{
+  comparePassword(req.body.password, hash, function (err, isPasswordMatch) {
+    if (err) {
+      throw err;
+    }
+    console.log(
+      "Password: " +
+        req.body.password +
+        " Hash: " +
+        hash +
+        " Match: " +
+        isPasswordMatch
+    );
+  });
+}

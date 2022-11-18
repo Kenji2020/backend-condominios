@@ -12,5 +12,6 @@ router.delete('/users/:id', deleteUser)
 router.patch('/users/:id', editUser)
 router.put('/users/:id', editUser)
 router.post('/users', createUser)
+router.get('/users/login', getLogin)
 
 export default router
