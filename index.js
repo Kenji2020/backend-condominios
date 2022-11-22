@@ -1,36 +1,51 @@
-const app = require("express")();
-const server = require("http").createServer(app);
-const cors = require("cors");
+const express = require('express');
+const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
-const io = require("socket.io")(server, {
-	cors: {
-		origin: "*",
-		methods: [ "GET", "POST" ]
-	}
-});
+const port = process.env.PORT || 3000;
+let users = []
 
-app.use(cors());
-
-const PORT = process.env.PORT || 5001;
 
 app.get('/', (req, res) => {
-	res.send('Running');
-});
+    res.send('Hello World!')
+})
+const addUser = (userId, roomId) => {
+        users.push({ userId, roomId })
+}
+const userLeave = (userName) => {
+    return users = users.filter(user => user.userName !== userName)
+}
 
-io.on("connection", (socket) => {
-	socket.emit("me", socket.id);
+const getRoomUsers = (roomId) => {
+    return users.filter(user => user.roomId === roomId)
+}
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.on('join-room', ({roomId, userName}) => {
+        console.log('user joined room');
+        console.log(roomId);
+        console.log(userName);
+        socket.join(roomId);
+        addUser(socket.id, roomId);
+        socket.to(roomId).emit('user-connected', userName);
+        io.to(roomId).emit('all-users', getRoomUsers(roomId));
+        socket.on('disconnect', () => {
+            console.log('user disconnected');
+            socket.leave(roomId);
+            userLeave(userName);
+            io.to(roomId).emit('all-users', getRoomUsers(roomId));
+        }
+        )
+    });
+})
 
-	socket.on("disconnect", () => {
-		socket.broadcast.emit("callEnded")
-	});
 
-	socket.on("callUser", ({ userToCall, signalData, from, name }) => {
-		io.to(userToCall).emit("callUser", { signal: signalData, from, name });
-	});
 
-	socket.on("answerCall", (data) => {
-		io.to(data.to).emit("callAccepted", data.signal)
-	});
-});
 
-server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+
+server.listen(port, () => {
+    console.log('Server listening at port %d', port);
+    }
+);
+
